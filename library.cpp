@@ -1,55 +1,55 @@
 #include <iostream>
 #include <string>
 
+using namespace std;
+
 // Base Class
 class LibraryItem {
 protected:
-    std::string title;
-    std::string itemID;
-    bool isAvailable;
+    string title;
+    string itemID;
+    int publicationYear;
 
 public:
-    // Constructor
-    LibraryItem(std::string t, std::string id) 
-        : title(t), itemID(id), isAvailable(true) {}
-
-    // Common method to display basic details
-    void displayBaseInfo() const {
-        std::cout << "Item ID: " << itemID << "\n"
-                  << "Title: " << title << "\n"
-                  << "Status: " << (isAvailable ? "Available" : "Checked Out") << "\n";
+    // Constructor for base class
+    LibraryItem(string t, string id, int year) {
+        title = t;
+        itemID = id;
+        publicationYear = year;
     }
 
-    // Method to check out the item
-    void checkOut() {
-        if (isAvailable) {
-            isAvailable = false;
-            std::cout << "\"" << title << "\" has been checked out successfully.\n";
-        } else {
-            std::cout << "\"" << title << "\" is already checked out.\n";
-        }
+    // Method to display common item details
+    void displayBaseInfo() {
+        cout << "Item ID          : " << itemID << endl;
+        cout << "Title            : " << title << endl;
+        cout << "Publication Year : " << publicationYear << endl;
     }
-
-    virtual ~LibraryItem() {} // Virtual destructor for safe polymorphism
 };
 
 // Derived Class 1: Book
 class Book : public LibraryItem {
 private:
-    std::string author;
+    string author;
+    string isbn;
     int pageCount;
 
 public:
-    // Constructor using initializer list to call base constructor
-    Book(std::string t, std::string id, std::string auth, int pages)
-        : LibraryItem(t, id), author(auth), pageCount(pages) {}
+    // Constructor calling base class constructor
+    Book(string t, string id, int year, string auth, string i, int pages) 
+        : LibraryItem(t, id, year) {
+        author = auth;
+        isbn = i;
+        pageCount = pages;
+    }
 
-    // Specific method for Book
-    void displayBookDetails() const {
-        std::cout << "--- Book Details ---\n";
+    // Method to display complete book details
+    void displayBookInfo() {
+        cout << "--- Book Information ---" << endl;
         displayBaseInfo();
-        std::cout << "Author: " << author << "\n"
-                  << "Page Count: " << pageCount << "\n\n";
+        cout << "Author           : " << author << endl;
+        cout << "ISBN             : " << isbn << endl;
+        cout << "Page Count       : " << pageCount << endl;
+        cout << "------------------------\n" << endl;
     }
 };
 
@@ -57,37 +57,39 @@ public:
 class Magazine : public LibraryItem {
 private:
     int issueNumber;
-    std::string releaseMonth;
+    string month;
+    string publisher;
 
 public:
-    // Constructor using initializer list to call base constructor
-    Magazine(std::string t, std::string id, int issue, std::string month)
-        : LibraryItem(t, id), issueNumber(issue), releaseMonth(month) {}
+    // Constructor calling base class constructor
+    Magazine(string t, string id, int year, int issue, string m, string pub) 
+        : LibraryItem(t, id, year) {
+        issueNumber = issue;
+        month = m;
+        publisher = pub;
+    }
 
-    // Specific method for Magazine
-    void displayMagazineDetails() const {
-        std::cout << "--- Magazine Details ---\n";
+    // Method to display complete magazine details
+    void displayMagazineInfo() {
+        cout << "--- Magazine Information ---" << endl;
         displayBaseInfo();
-        std::cout << "Issue Number: " << issueNumber << "\n"
-                  << "Release Month: " << releaseMonth << "\n\n";
+        cout << "Issue Number     : " << issueNumber << endl;
+        cout << "Month            : " << month << endl;
+        cout << "Publisher        : " << publisher << endl;
+        cout << "----------------------------\n" << endl;
     }
 };
 
 int main() {
-    // Creating objects of derived classes
-    Book myBook("The C++ Programming Language", "B101", "Bjarne Stroustrup", 1300);
-    Magazine myMagazine("Tech Today", "M505", 42, "September");
+    // Creating an object of the Book class
+    Book myBook("The Alchemist", "B1001", 1988, "Paulo Coelho", "978-0061122415", 208);
+    
+    // Creating an object of the Magazine class
+    Magazine myMag("National Geographic", "M2001", 2024, 512, "June", "Partners");
 
     // Displaying details
-    myBook.displayBookDetails();
-    myMagazine.displayMagazineDetails();
-
-    // Demonstrating inherited behavior
-    std::cout << "--- Action: Checking out the book ---\n";
-    myBook.checkOut();
-    
-    // Trying to check out the same book again
-    myBook.checkOut();
+    myBook.displayBookInfo();
+    myMag.displayMagazineInfo();
 
     return 0;
 }
